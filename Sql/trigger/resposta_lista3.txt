@@ -1,0 +1,25 @@
+select * from tb_proposta;
+select * from tb_votacao;
+select * from tb_morador;
+
+--5
+CREATE OR REPLACE TRIGGER new_tg_votacao
+BEFORE INSERT
+ON tb_votacao
+REFERENCING NEW AS NEW
+FOR EACH ROW
+declare
+total number;
+BEGIN
+ IF UPPER(:new.voto) not in ('C', 'D', 'A')
+  THEN RAISE_APPLICATION_ERROR(-20001, 'Voto inválido.');
+ end if;
+ select count(cod_morador) into total from tb_votacao 
+ where cod_morador = :new.cod_morador and cod_proposta = :new.cod_proposta;
+ if total > 0
+  THEN RAISE_APPLICATION_ERROR(-20002, 'Proposta já votada.');
+ end if; 
+END;
+/
+
+insert into tb_votacao values (1, 2, 'D');

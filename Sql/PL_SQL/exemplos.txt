@@ -1,0 +1,59 @@
+set serveroutput on;
+
+clear screen;
+declare 
+x varchar2(50);
+begin
+  x:= '&nome';
+  dbms_output.put_line(x);
+end;
+/
+show error;
+
+--estrutura de decisão 
+--IF (CONDIÇÃO) THEN ELSE END IF
+--IF (CONDIÇÃO) THEN ELSIF (CONDICAO) THEN ELSE END IF
+
+-- EX1 - VERIFICAR QUAL NUMERO É MAIOR
+clear screen;
+declare 
+NUM1 number;
+num2 number;
+
+begin
+  num1:=&numero;
+  num2:=&numero;
+  if num1 > num2
+    then dbms_output.put_li(num1 ||' é maior do que '||num2);
+    elsif num1 < num2
+      then dbms_output.put_line(num2 ||' é maior do que '||num1);
+      else dbms_output.put_line(num1 ||' é igual a '||num2);
+  end if;    
+end;
+/
+show error;
+
+-- construa um bloco anonimo que faça as operacoes básicas da matematica (+, -, /, *)
+clear screen;
+declare 
+NUM1 number;
+num2 number;
+operador char(1);
+
+begin
+  num1:=&numero;
+  operador := '&x';
+  num2:=&numero;
+  
+  if operador ='+'
+    then dbms_output.put_line(num1 ||' + '||num2||' = '||(num1+num2));
+    elsif operador ='-'
+      then dbms_output.put_line(num1 ||' - '||num2||' = '||(num1-num2));
+      elsif operador ='*'
+        then dbms_output.put_line(num1 ||' * '||num2||' = '||(num1*num2));
+        else dbms_output.put_line(num1 ||' / '||num2||' = '||(num1/num2));
+  end if;    
+end;
+/
+show error;
+

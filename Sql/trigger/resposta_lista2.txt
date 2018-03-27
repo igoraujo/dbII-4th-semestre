@@ -1,0 +1,42 @@
+--2
+create or replace trigger tg_saldo
+before insert 
+on compra
+referencing new as new
+for each row
+declare
+vl_saldo number(20, 2);
+begin
+select saldo_usuario into vl_saldo from usuario where COD_USUARIO = :new.cod_usuario;
+if vl_saldo < :new.valor_compra
+  then raise_application_error(-20009,'saldo insuficiente');
+  else update usuario set saldo_usuario = saldo_usuario - :new.valor_compra where COD_USUARIO = :new.cod_usuario;  
+       DBMS_OUTPUT.put_line('Compra realizada');
+end if;
+end;
+/
+
+select cod_usuario, saldo_usuario from usuario;
+show error;
+
+insert into compra values (2, sysdate, 500, 1);
+
+--3
+create or replace trigger tg_valor
+before insert
+on venda
+referencing new as new
+for each row
+declare
+valor number(10,2);
+begin
+select valor_produto into valor from produto where COD_PRODUTO = :new.cod_produto;
+if :new.valor_venda < valor*1.3
+  then raise_application_error(-20001,'valor abaixo do permitido');
+end if;
+end;
+/
+select * from produto;
+select * from venda;
+
+insert into venda values (2, 1, 5);
